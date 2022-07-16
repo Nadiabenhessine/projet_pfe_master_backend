@@ -1,0 +1,11 @@
+--2022-05-29 14:25:02--  https://dl.google.com/linux/linux_signing_key.pub
+Résolution de dl.google.com (dl.google.com)… 142.251.209.46, 2a00:1450:4002:411::200e
+Connexion à dl.google.com (dl.google.com)|142.251.209.46|:443… connecté.
+requête HTTP transmise, en attente de la réponse… 200 OK
+Taille : 12415 (12K) [application/octet-stream]
+Enregistre : ‘STDOUT’
+
+-                            0%[                                        ]       0  --.-KB/s               -                          100%[=======================================>]  12.12K  --.-KB/s    ds 0.009s  
+
+2022-05-29 14:25:03 (1.37 MB/s) — envoi vers sortie standard [12415/12415]
+
