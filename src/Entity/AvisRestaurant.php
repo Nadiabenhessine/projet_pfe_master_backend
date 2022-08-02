@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\AvisRestaurantRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\AvisRestaurantRepository;
 
+#[ApiResource]
 #[ORM\Entity(repositoryClass: AvisRestaurantRepository::class)]
 class AvisRestaurant
 {

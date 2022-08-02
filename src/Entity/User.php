@@ -69,14 +69,9 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
     private $password;
 
 
-    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Reclamation::class)]
-    private $reclamations;
-
-
     public function __construct()
     {
         $this->regions = new ArrayCollection();
-        $this->reclamations = new ArrayCollection();
     }
 
 
@@ -211,35 +206,5 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
     }   
     public function __toString(){
         return $this->nom;
-    }
-
-    /**
-     * @return Collection<int, Reclamation>
-     */
-    public function getReclamations(): Collection
-    {
-        return $this->reclamations;
-    }
-
-    public function addReclamation(Reclamation $reclamation): self
-    {
-        if (!$this->reclamations->contains($reclamation)) {
-            $this->reclamations[] = $reclamation;
-            $reclamation->setUtilisateur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReclamation(Reclamation $reclamation): self
-    {
-        if ($this->reclamations->removeElement($reclamation)) {
-            // set the owning side to null (unless already changed)
-            if ($reclamation->getUtilisateur() === $this) {
-                $reclamation->setUtilisateur(null);
-            }
-        }
-
-        return $this;
-    }  
+    } 
 }

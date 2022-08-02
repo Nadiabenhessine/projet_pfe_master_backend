@@ -5,10 +5,13 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Entity\Zone;
 use App\Entity\Ville;
+use App\Entity\Client;
+use App\Entity\Contact;
 use App\Entity\Livreur;
 use App\Entity\Vehicule;
 use App\Entity\Operateur;
 use App\Entity\Abonnement;
+use App\Entity\Newsletter;
 use App\Entity\Restaurant;
 use App\Entity\RecetteJour;
 use App\Entity\Reclamation;
@@ -53,12 +56,10 @@ class DashboardController extends AbstractDashboardController
 
 //utilisateurs
         yield MenuItem::section('Utilisateurs');
+        yield MenuItem::linkToCrud('Liste des utilisateurs', 'fa-solid fa-users-line', User::class);
 
-        yield MenuItem::subMenu('Tous les utilisateurs', 'fa-solid fa-users-line')->setSubItems([
-            MenuItem::linkToCrud('Consulter liste des utilisateurs', 'fa fa-eye', User::class),
-        ]);
-
-        yield MenuItem::subMenu('Livreur', 'fa-solid fa-person')->setSubItems([
+   
+        yield MenuItem::subMenu('Livreurs', 'fa-solid fa-person')->setSubItems([
               MenuItem::linkToCrud('ajouter un livreur', 'fas fa-plus', Livreur::class)->setAction(Crud::PAGE_NEW),
               MenuItem::linkToCrud('Consulter liste livreurs', 'fa fa-eye', Livreur::class),
         ]);
@@ -66,14 +67,23 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('ajouter un traffic manager', 'fas fa-plus', TrafficManager::class)->setAction(Crud::PAGE_NEW),
             MenuItem::linkToCrud('Consulter liste des traffic manager', 'fa fa-eye', TrafficManager::class),
         ]);
-         yield MenuItem::subMenu('Operateur', 'fa-solid fa-person')->setSubItems([
+         yield MenuItem::subMenu('Operateurs', 'fa-solid fa-person')->setSubItems([
         MenuItem::linkToCrud('ajouter un opérateur', 'fas fa-plus', Operateur::class)->setAction(Crud::PAGE_NEW),
         MenuItem::linkToCrud('Consulter liste des opérateurs', 'fa fa-eye', Operateur::class),
         ]);
+        yield MenuItem::linkToCrud('Clients', 'fa-solid fa-person', Client::class);
+//relation clients-personnels
+      yield MenuItem::section('Relations clients-personnels');
+      yield   MenuItem::linkToCrud('Reclamations', 'fa-solid fa-comments', Reclamation::class);
+      yield   MenuItem::linkToCrud('Newsletters', 'fa-solid fa-book', Newsletter::class);
+      yield   MenuItem::linkToCrud('Messages', 'fa-solid fa-envelope', Contact::class);
+//recettes des jours
+      yield MenuItem::section('recettes des jours');
+      yield MenuItem::linkToCrud('Recettes des jours', 'fa-solid fa-sack-dollar', RecetteJour::class);
 
-//E_commerce
+//Entités de base
 
-        yield MenuItem::section('E-commerce');
+        yield MenuItem::section('Entités de base');
         yield MenuItem::subMenu('Ville', 'fa-solid fa-city')->setSubItems([
               MenuItem::linkToCrud('ajouter une ville', 'fas fa-plus', Ville::class)->setAction(Crud::PAGE_NEW),
               MenuItem::linkToCrud('Consulter liste des villes', 'fa fa-eye', Ville::class),
@@ -109,16 +119,8 @@ class DashboardController extends AbstractDashboardController
               MenuItem::linkToCrud('Consulter liste des etats commandes', 'fa fa-eye', EtatCommande::class),
         ]);
 
-        yield MenuItem::section('recettes des jours');
-        yield MenuItem::linkToCrud('Recettes des jours', 'fa-solid fa-sack-dollar', RecetteJour::class);
-        
 
-        yield MenuItem::section('Reclamations');
 
-        yield MenuItem::subMenu('Reclamations', 'fa-solid fa-comments')->setSubItems([
-            MenuItem::linkToCrud('ajouter un type de reclamation', 'fas fa-plus', TypeReclamation::class)->setAction(Crud::PAGE_NEW),
-            MenuItem::linkToCrud('Consulter types de reclamations', 'fa fa-eye', TypeReclamation::class),
-            MenuItem::linkToCrud('Consulter les reclamations', 'fa-solid fa-comments', Reclamation::class),
-        ]);
+     
        }
 }

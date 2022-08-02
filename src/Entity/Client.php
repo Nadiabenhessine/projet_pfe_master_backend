@@ -6,8 +6,10 @@ use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 
+#[ApiResource]
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client extends User
 {
@@ -21,12 +23,19 @@ class Client extends User
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: AvisRestaurant::class)]
     private $avisRestaurants;
 
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Reclamation::class)]
+    private $reclamations;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $genre;
+
 
     public function __construct()
     {
         $this->commandes = new ArrayCollection();
         $this->avisProduits = new ArrayCollection();
         $this->avisRestaurants = new ArrayCollection();
+        $this->reclamations = new ArrayCollection();
     }
   
 
@@ -116,6 +125,48 @@ class Client extends User
                 $avisRestaurant->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reclamation>
+     */
+    public function getReclamations(): Collection
+    {
+        return $this->reclamations;
+    }
+
+    public function addReclamation(Reclamation $reclamation): self
+    {
+        if (!$this->reclamations->contains($reclamation)) {
+            $this->reclamations[] = $reclamation;
+            $reclamation->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReclamation(Reclamation $reclamation): self
+    {
+        if ($this->reclamations->removeElement($reclamation)) {
+            // set the owning side to null (unless already changed)
+            if ($reclamation->getClient() === $this) {
+                $reclamation->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getGenre(): ?string
+    {
+        return $this->genre;
+    }
+
+    public function setGenre(string $genre): self
+    {
+        $this->genre = $genre;
 
         return $this;
     }

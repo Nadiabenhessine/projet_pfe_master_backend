@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\MeilleurCheminRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\MeilleurCheminRepository;
 
+#[ApiResource]
 #[ORM\Entity(repositoryClass: MeilleurCheminRepository::class)]
 class MeilleurChemin
 {

@@ -21,12 +21,10 @@ class Reclamation
     #[ORM\Column(type: 'string', length: 500)]
     private $sujet;
 
-    #[ORM\ManyToOne(targetEntity: TypeReclamation::class, inversedBy: 'reclamations')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $type_reclamation;
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'reclamations')]
+    private $client;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reclamations')]
-    private $utilisateur;
+
  
     public function getId(): ?int
     {
@@ -57,26 +55,14 @@ class Reclamation
         return $this;
     }
 
-    public function getTypeReclamation(): ?TypeReclamation
+    public function getClient(): ?Client
     {
-        return $this->type_reclamation;
+        return $this->client;
     }
 
-    public function setTypeReclamation(?TypeReclamation $type_reclamation): self
+    public function setClient(?Client $client): self
     {
-        $this->type_reclamation = $type_reclamation;
-
-        return $this;
-    }
-
-    public function getUtilisateur(): ?User
-    {
-        return $this->utilisateur;
-    }
-
-    public function setUtilisateur(?User $utilisateur): self
-    {
-        $this->utilisateur = $utilisateur;
+        $this->client = $client;
 
         return $this;
     }
