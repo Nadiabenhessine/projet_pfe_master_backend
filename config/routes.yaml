@@ -5,3 +5,56 @@ controllers:
 kernel:
     resource: ../src/Kernel.php
     type: annotation
+
+login:
+    path: /api/login
+    controller: App\Controller\SecurityController::login
+
+api_register_check:
+    path: /api/register_check
+    controller: App\Controller\RegisterController::register
+
+logout:
+    path: /api/logout_check
+    controller: App\Controller\SecurityController::logout
+
+findMe:
+    path: /api/findMe
+    controller: App\Controller\FindMeController::findMe
+
+RestaurantByVilleAndCategorie:
+    path: /api/restaurantByVilleAndCategorie/{idVille}/{idCatRest}
+    controller: App\Controller\RestaurantByVilleAndCategorieController::FindRestaurantByVilleAndCategorie
+
+
+RestaurantById:
+    path: /api/restaurantById/{id}
+    controller: App\Controller\RestaurantByVilleAndCategorieController::findRestaurantById
+
+livreurDisponible:
+    path: /api/ProduitByRestaurantId/restaurantId
+    controller: App\Controller\LivreurDisponibleController::findProduitByRestaurantId
+
+ProduitByRestaurantId:
+    path: /api/ProduitByRestaurantId/{restaurantId}
+    controller: App\Controller\ProduitByRestaurantIdController::findProduitByRestaurantId
+
+
+RestaurantByIdOperateur:
+    path: /api/espaceOperateur/{idOperateur}
+    controller: App\Controller\EspaceOperateurController::findRestaurantByIdOperateur
+
+
+livreurByTrafficManagerId:
+    path: /api/livreurByIdtm/{trafficManagerId}
+    controller: App\Controller\EspaceTrafficManagerController::findLivreurByTrafficManagerId
+
+
+ProduitById:
+    path: /api/ProduitById/{produitId}
+    controller: App\Controller\ProduitByRestaurantIdController::findProduitById
+
+
+ligneCommandeByIdProduit:
+    path: /api/lignecommande/{produitId}
+    controller: App\Controller\LigneCommandeController::findligneCommandeByIdProduit

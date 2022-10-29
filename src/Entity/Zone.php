@@ -27,9 +27,6 @@ class Zone
     private $livreurs;
 
 
-    #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Restaurant::class)]
-    private $restaurants;
-
     #[ORM\ManyToOne(targetEntity: Ville::class, inversedBy: 'zones')]
     private $ville;
 
@@ -37,7 +34,6 @@ class Zone
     {
         $this->livreurs = new ArrayCollection();
         $this->livreurs_zone = new ArrayCollection();
-        $this->restaurants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -99,35 +95,7 @@ class Zone
         return $this;
     }
 
-    /**
-     * @return Collection<int, Restaurant>
-     */
-    public function getRestaurants(): Collection
-    {
-        return $this->restaurants;
-    }
 
-    public function addRestaurant(Restaurant $restaurant): self
-    {
-        if (!$this->restaurants->contains($restaurant)) {
-            $this->restaurants[] = $restaurant;
-            $restaurant->setZone($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRestaurant(Restaurant $restaurant): self
-    {
-        if ($this->restaurants->removeElement($restaurant)) {
-            // set the owning side to null (unless already changed)
-            if ($restaurant->getZone() === $this) {
-                $restaurant->setZone(null);
-            }
-        }
-
-        return $this;
-    }
     public function __toString(){
         return $this->libelle;
     }

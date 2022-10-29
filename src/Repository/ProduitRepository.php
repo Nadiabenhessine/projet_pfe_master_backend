@@ -63,4 +63,19 @@ class ProduitRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+public function findProduitByIdRestaurant(int $restaurantId): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery('
+           SELECT p
+           FROM App\Entity\Produit p
+           WHERE p.restaurant =:restaurantId 
+        '
+        )
+        ->setParameter('restaurantId', $restaurantId);
+
+    return $query->getResult();
+}
 }

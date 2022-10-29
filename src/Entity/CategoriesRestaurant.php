@@ -26,6 +26,12 @@ class CategoriesRestaurant
     #[ORM\OneToMany(mappedBy: 'categorie_restaurant', targetEntity: Restaurant::class)]
     private $restaurants;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageUrl = null;
+
     public function __construct()
     {
         $this->restaurants = new ArrayCollection();
@@ -91,5 +97,29 @@ class CategoriesRestaurant
     }
     public function __toString(){
         return $this->libelle;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl(?string $imageUrl): self
+    {
+        $this->imageUrl = $imageUrl;
+
+        return $this;
     }
 }

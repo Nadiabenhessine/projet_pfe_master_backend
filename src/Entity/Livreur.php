@@ -27,17 +27,16 @@ class Livreur extends User
     #[ORM\JoinColumn(nullable: true)]
     private $traffic_manager;
 
-    #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'livreurs_zone')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $zone;
-
-    #[ORM\OneToMany(mappedBy: 'livreur', targetEntity: Commande::class)]
-    private $commandes;
-
 
     #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: 'livreurs')]
     #[ORM\JoinColumn(nullable: false)]
     private $vehicule;
+
+    #[ORM\ManyToOne(inversedBy: 'livreurs')]
+    private ?Ville $ville = null;
+
+    #[ORM\OneToMany(mappedBy: 'livreur', targetEntity: Commande::class)]
+    private Collection $commandes;
 
   
     public function __construct()
@@ -84,48 +83,6 @@ class Livreur extends User
         return $this;
     }
 
-    public function getZone(): ?Zone
-    {
-        return $this->zone;
-    }
-
-    public function setZone(?Zone $zone): self
-    {
-        $this->zone = $zone;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Commande>
-     */
-    public function getCommandes(): Collection
-    {
-        return $this->commandes;
-    }
-
-    public function addCommande(Commande $commande): self
-    {
-        if (!$this->commandes->contains($commande)) {
-            $this->commandes[] = $commande;
-            $commande->setLivreur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommande(Commande $commande): self
-    {
-        if ($this->commandes->removeElement($commande)) {
-            // set the owning side to null (unless already changed)
-            if ($commande->getLivreur() === $this) {
-                $commande->setLivreur(null);
-            }
-        }
-
-        return $this;
-        }
-
     public function isDisponibilite(): ?bool
     {
         return $this->disponibilite;
@@ -148,6 +105,48 @@ class Livreur extends User
     public function setVehicule(?Vehicule $vehicule): self
     {
         $this->vehicule = $vehicule;
+
+        return $this;
+    }
+
+    public function getVille(): ?Ville
+    {
+        return $this->ville;
+    }
+
+    public function setVille(?Ville $ville): self
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    }
+
+    public function addCommande(Commande $commande): self
+    {
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes->add($commande);
+            $commande->setLivreur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): self
+    {
+        if ($this->commandes->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getLivreur() === $this) {
+                $commande->setLivreur(null);
+            }
+        }
 
         return $this;
     }

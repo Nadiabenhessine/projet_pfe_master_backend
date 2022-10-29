@@ -14,9 +14,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Client extends User
 {
       
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Commande::class)]
-    private $commandes;
-
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: AvisProduit::class)]
     private $avisProduits;
 
@@ -26,49 +23,19 @@ class Client extends User
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Reclamation::class)]
     private $reclamations;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $genre;
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Commande::class)]
+    private Collection $commandes;
 
+  
 
     public function __construct()
     {
-        $this->commandes = new ArrayCollection();
         $this->avisProduits = new ArrayCollection();
         $this->avisRestaurants = new ArrayCollection();
         $this->reclamations = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
     }
   
-
-     /**
-     * @return Collection<int, Commande>
-     */
-    public function getCommandes(): Collection
-    {
-        return $this->commandes;
-    }
-
-    public function addCommande(Commande $commande): self
-    {
-        if (!$this->commandes->contains($commande)) {
-            $this->commandes[] = $commande;
-            $commande->setClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommande(Commande $commande): self
-    {
-        if ($this->commandes->removeElement($commande)) {
-            // set the owning side to null (unless already changed)
-            if ($commande->getClient() === $this) {
-                $commande->setClient(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, AvisProduit>
      */
@@ -159,17 +126,36 @@ class Client extends User
         return $this;
     }
 
-    public function getGenre(): ?string
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommandes(): Collection
     {
-        return $this->genre;
+        return $this->commandes;
     }
 
-    public function setGenre(string $genre): self
+    public function addCommande(Commande $commande): self
     {
-        $this->genre = $genre;
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes->add($commande);
+            $commande->setClient($this);
+        }
 
         return $this;
     }
+
+    public function removeCommande(Commande $commande): self
+    {
+        if ($this->commandes->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getClient() === $this) {
+                $commande->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
 
     
 }

@@ -23,7 +23,7 @@ class Operateur extends User
     private $restaurant;
 
     #[ORM\OneToMany(mappedBy: 'operateur', targetEntity: Commande::class)]
-    private $commandes;
+    private Collection $commandes;
 
 
     public function __construct()
@@ -86,7 +86,7 @@ class Operateur extends User
     public function addCommande(Commande $commande): self
     {
         if (!$this->commandes->contains($commande)) {
-            $this->commandes[] = $commande;
+            $this->commandes->add($commande);
             $commande->setOperateur($this);
         }
 
@@ -104,6 +104,5 @@ class Operateur extends User
 
         return $this;
     }
-
   
 }

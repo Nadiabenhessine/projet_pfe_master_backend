@@ -63,4 +63,19 @@ class OperateurRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+//find restaurant by id operateur
+public function findRestaurantByIdOperateur(int $idOperateur): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery('
+           SELECT o
+           FROM App\Entity\Operateur o
+           WHERE o.id =:idOperateur 
+        '
+        )
+        ->setParameter('idOperateur', $idOperateur);
+    return $query->getResult();
+    }
 }

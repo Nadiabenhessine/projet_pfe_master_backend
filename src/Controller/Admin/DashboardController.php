@@ -47,7 +47,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Plateforme livraison');
+            ->setTitle('Nadia Delivery');
     }
 
     public function configureMenuItems(): iterable
@@ -74,24 +74,22 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Clients', 'fa-solid fa-person', Client::class);
 //relation clients-personnels
       yield MenuItem::section('Relations clients-personnels');
+      /*
       yield   MenuItem::linkToCrud('Reclamations', 'fa-solid fa-comments', Reclamation::class);
+      */
       yield   MenuItem::linkToCrud('Newsletters', 'fa-solid fa-book', Newsletter::class);
       yield   MenuItem::linkToCrud('Messages', 'fa-solid fa-envelope', Contact::class);
+      
 //recettes des jours
       yield MenuItem::section('recettes des jours');
       yield MenuItem::linkToCrud('Recettes des jours', 'fa-solid fa-sack-dollar', RecetteJour::class);
 
 //Entités de base
 
-        yield MenuItem::section('Entités de base');
+        yield MenuItem::section('Ressources');
         yield MenuItem::subMenu('Ville', 'fa-solid fa-city')->setSubItems([
               MenuItem::linkToCrud('ajouter une ville', 'fas fa-plus', Ville::class)->setAction(Crud::PAGE_NEW),
               MenuItem::linkToCrud('Consulter liste des villes', 'fa fa-eye', Ville::class),
-        ]);
-
-        yield MenuItem::subMenu('Zone', 'fa-solid fa-building')->setSubItems([
-              MenuItem::linkToCrud('ajouter une zone', 'fas fa-plus', Zone::class)->setAction(Crud::PAGE_NEW),
-              MenuItem::linkToCrud('Consulter liste des zones', 'fa fa-eye', Zone::class),
         ]);
 
         yield MenuItem::subMenu('Categorie restaurant', 'fa fa-tags')->setSubItems([
@@ -103,12 +101,12 @@ class DashboardController extends AbstractDashboardController
               MenuItem::linkToCrud('ajouter un restaurant', 'fas fa-plus', Restaurant::class)->setAction(Crud::PAGE_NEW),
               MenuItem::linkToCrud('Consulter liste des restaurants', 'fa fa-eye', Restaurant::class),
         ]);
-
+        /*
         yield MenuItem::subMenu('Abonnement', 'fa-solid fa-euro-sign')->setSubItems([
               MenuItem::linkToCrud('ajouter un abonnement', 'fas fa-plus', Abonnement::class)->setAction(Crud::PAGE_NEW),
               MenuItem::linkToCrud('Consulter liste des abonnements', 'fa fa-eye', Abonnement::class),
         ]);
-
+        
         yield MenuItem::subMenu('Vehicule', 'fa-solid fa-car-rear')->setSubItems([
               MenuItem::linkToCrud('ajouter une vehicule', 'fas fa-plus', Vehicule::class)->setAction(Crud::PAGE_NEW),
               MenuItem::linkToCrud('Consulter liste des vehicules', 'fa fa-eye', Vehicule::class),
@@ -118,7 +116,7 @@ class DashboardController extends AbstractDashboardController
               MenuItem::linkToCrud('ajouter un etat de commande', 'fas fa-plus', EtatCommande::class)->setAction(Crud::PAGE_NEW),
               MenuItem::linkToCrud('Consulter liste des etats commandes', 'fa fa-eye', EtatCommande::class),
         ]);
-
+        */
 
 
      

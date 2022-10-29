@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
@@ -23,17 +24,16 @@ class RecetteJourCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-        // desactiver action"créer une nouveau recette de jour"
+        // desactiver action"créer une recette du jour "
        ->disable(Action::NEW, Action::DELETE)
-       ->disable(Crud::PAGE_DETAIL, Action::EDIT);
+       ->disable( Action::EDIT);
     }
-    
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new('id')->hideOnForm(),
             DateField::new('date'),
-            NumberField::new('montant'),
+            IntegerField::new('montant'),
             TextField::new('remarque'),
             AssociationField::new('traffic_manager'),
         ];

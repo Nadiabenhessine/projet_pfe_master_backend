@@ -26,9 +26,17 @@ class Ville
     #[ORM\ManyToOne(targetEntity: TrafficManager::class, inversedBy: 'villes')]
     private $traffic_manager;
 
+    #[ORM\OneToMany(mappedBy: 'ville', targetEntity: Restaurant::class)]
+    private Collection $restaurants;
+
+    #[ORM\OneToMany(mappedBy: 'ville', targetEntity: Livreur::class)]
+    private Collection $livreurs;
+
     public function __construct()
     {
         $this->zones = new ArrayCollection();
+        $this->restaurants = new ArrayCollection();
+        $this->livreurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -91,5 +99,65 @@ class Ville
     }
     public function __toString(){
         return $this->libelle;
+    }
+
+    /**
+     * @return Collection<int, Restaurant>
+     */
+    public function getRestaurants(): Collection
+    {
+        return $this->restaurants;
+    }
+
+    public function addRestaurant(Restaurant $restaurant): self
+    {
+        if (!$this->restaurants->contains($restaurant)) {
+            $this->restaurants->add($restaurant);
+            $restaurant->setVille($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRestaurant(Restaurant $restaurant): self
+    {
+        if ($this->restaurants->removeElement($restaurant)) {
+            // set the owning side to null (unless already changed)
+            if ($restaurant->getVille() === $this) {
+                $restaurant->setVille(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Livreur>
+     */
+    public function getLivreurs(): Collection
+    {
+        return $this->livreurs;
+    }
+
+    public function addLivreur(Livreur $livreur): self
+    {
+        if (!$this->livreurs->contains($livreur)) {
+            $this->livreurs->add($livreur);
+            $livreur->setVille($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivreur(Livreur $livreur): self
+    {
+        if ($this->livreurs->removeElement($livreur)) {
+            // set the owning side to null (unless already changed)
+            if ($livreur->getVille() === $this) {
+                $livreur->setVille(null);
+            }
+        }
+
+        return $this;
     }
 }

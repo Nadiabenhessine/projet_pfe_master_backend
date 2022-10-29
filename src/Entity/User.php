@@ -20,6 +20,7 @@ use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[UniqueEntity("email")]
@@ -36,7 +37,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ApiResource]
 //#[ORM\Table(name: '`user`')]
-  class User implements UserInterface, PasswordAuthenticatedUserInterface 
+  class User implements UserInterface, PasswordAuthenticatedUserInterface , JWTUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -59,7 +60,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
     private $num_tel;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    #[Assert\Email(message:"Email invalide !")]
     private $email;
 
     #[ORM\Column(type: 'json')]
@@ -67,6 +67,9 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
     #[ORM\Column(type: 'string')]
     private $password;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $genre = null;
 
 
     public function __construct()
@@ -206,5 +209,26 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
     }   
     public function __toString(){
         return $this->nom;
-    } 
+    }
+
+    public function getGenre(): ?string
+    {
+        return $this->genre;
+    }
+
+    public function setGenre(?string $genre): self
+    {
+        $this->genre = $genre;
+
+        return $this;
+    }
+
+    public static function createFromPayload($username, array $payload)
+    {
+        return new self(
+            $username,
+            $payload['roles'], // Added by default
+            $payload['email']  // Custom
+        );
+    }
 }

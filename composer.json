@@ -26,6 +26,7 @@
         "symfony/flex": "^2",
         "symfony/form": "6.0.*",
         "symfony/framework-bundle": "6.0.*",
+        "symfony/http-client": "6.0.*",
         "symfony/mime": "6.0.*",
         "symfony/password-hasher": "6.0.*",
         "symfony/property-access": "6.0.*",

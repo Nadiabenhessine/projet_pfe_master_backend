@@ -17,27 +17,11 @@ class Commande
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $ref;
-
     #[ORM\Column(type: 'date')]
     private $date_commande;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $description;
-
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $adresse_livraison;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $position_livraison;
-
-  
-    #[ORM\Column(type: 'date', nullable: true)]
-    private $date_prevu_livraison;
-
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $delai_livraion;
 
     #[ORM\Column(type: 'float', nullable: true)]
     private $frais_livraison;
@@ -45,28 +29,27 @@ class Commande
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $remarque;
 
-    #[ORM\ManyToOne(targetEntity: Livreur::class, inversedBy: 'commandes')]
+    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    private ?Livreur $livreur = null;
+
+    #[ORM\ManyToOne(inversedBy: 'commandes')]
     #[ORM\JoinColumn(nullable: false)]
-    private $livreur;
+    private ?Client $client = null;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commandes')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $client;
+    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    private ?Operateur $operateur = null;
 
-    #[ORM\ManyToOne(targetEntity: Operateur::class, inversedBy: 'commandes')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $operateur;
+    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    private ?TrafficManager $trafficManager = null;
 
-    #[ORM\OneToOne(inversedBy: 'commande', targetEntity: MeilleurChemin::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private $meuilleur_chemin;
+    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: LigneCommande::class)]
+    private Collection $ligneCommandes;
 
-    #[ORM\ManyToOne(targetEntity: EtatCommande::class, inversedBy: 'commandes')]
-    private $etat_commande;
-
-   
+  
+  
     public function __construct()
     {
+        $this->ligneCommandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,17 +57,6 @@ class Commande
         return $this->id;
     }
 
-    public function getRef(): ?string
-    {
-        return $this->ref;
-    }
-
-    public function setRef(string $ref): self
-    {
-        $this->ref = $ref;
-
-        return $this;
-    }
 
     public function getDateCommande(): ?\DateTimeInterface
     {
@@ -98,18 +70,9 @@ class Commande
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
+  
 
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
+  
     public function getAdresseLivraison(): ?string
     {
         return $this->adresse_livraison;
@@ -122,41 +85,7 @@ class Commande
         return $this;
     }
 
-    public function getPositionLivraison(): ?string
-    {
-        return $this->position_livraison;
-    }
 
-    public function setPositionLivraison(?string $position_livraison): self
-    {
-        $this->position_livraison = $position_livraison;
-
-        return $this;
-    }
-
-     public function getDatePrevuLivraison(): ?\DateTimeInterface
-    {
-        return $this->date_prevu_livraison;
-    }
-
-    public function setDatePrevuLivraison(?\DateTimeInterface $date_prevu_livraison): self
-    {
-        $this->date_prevu_livraison = $date_prevu_livraison;
-
-        return $this;
-    }
-
-    public function getDelaiLivraion(): ?int
-    {
-        return $this->delai_livraion;
-    }
-
-    public function setDelaiLivraion(?int $delai_livraion): self
-    {
-        $this->delai_livraion = $delai_livraion;
-
-        return $this;
-    }
 
     public function getFraisLivraison(): ?float
     {
@@ -218,28 +147,49 @@ class Commande
         return $this;
     }
 
-    public function getMeuilleurChemin(): ?MeilleurChemin
+    public function getTrafficManager(): ?TrafficManager
     {
-        return $this->meuilleur_chemin;
+        return $this->trafficManager;
     }
 
-    public function setMeuilleurChemin(MeilleurChemin $meuilleur_chemin): self
+    public function setTrafficManager(?TrafficManager $trafficManager): self
     {
-        $this->meuilleur_chemin = $meuilleur_chemin;
+        $this->trafficManager = $trafficManager;
 
         return $this;
     }
 
-    public function getEtatCommande(): ?EtatCommande
+    /**
+     * @return Collection<int, LigneCommande>
+     */
+    public function getLigneCommandes(): Collection
     {
-        return $this->etat_commande;
+        return $this->ligneCommandes;
     }
 
-    public function setEtatCommande(?EtatCommande $etat_commande): self
+    public function addLigneCommande(LigneCommande $ligneCommande): self
     {
-        $this->etat_commande = $etat_commande;
+        if (!$this->ligneCommandes->contains($ligneCommande)) {
+            $this->ligneCommandes->add($ligneCommande);
+            $ligneCommande->setCommande($this);
+        }
 
         return $this;
     }
+
+    public function removeLigneCommande(LigneCommande $ligneCommande): self
+    {
+        if ($this->ligneCommandes->removeElement($ligneCommande)) {
+            // set the owning side to null (unless already changed)
+            if ($ligneCommande->getCommande() === $this) {
+                $ligneCommande->setCommande(null);
+            }
+        }
+
+        return $this;
+    }
+
+  
+
 
 }

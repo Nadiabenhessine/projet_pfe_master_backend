@@ -35,8 +35,8 @@ class Restaurant
     #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Produit::class, orphanRemoval: true)]
     private $produits;
 
-    #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'restaurants')]
-    private $zone;
+    #[ORM\ManyToOne(inversedBy: 'restaurants')]
+    private ?Ville $ville = null;
 
     #[ORM\ManyToOne(targetEntity: CategoriesRestaurant::class, inversedBy: 'restaurants')]
     #[ORM\JoinColumn(nullable: false)]
@@ -52,7 +52,12 @@ class Restaurant
     private $avisRestaurants;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
-    private $ouvert;
+    private $statu;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageUrl = null;
+
+    
 
     
     public function __construct()
@@ -144,18 +149,6 @@ class Restaurant
                 $produit->setRestaurant(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getZone(): ?Zone
-    {
-        return $this->zone;
-    }
-
-    public function setZone(?Zone $zone): self
-    {
-        $this->zone = $zone;
 
         return $this;
     }
@@ -277,14 +270,38 @@ class Restaurant
         return $this->nom;
     }
 
-    public function isOuvert(): ?bool
+    public function isStatu(): ?bool
     {
-        return $this->ouvert;
+        return $this->statu;
     }
 
-    public function setOuvert(?bool $ouvert): self
+    public function setStatu(?bool $statu): self
     {
-        $this->ouvert = $ouvert;
+        $this->statu = $statu;
+
+        return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl(?string $imageUrl): self
+    {
+        $this->imageUrl = $imageUrl;
+
+        return $this;
+    }
+
+    public function getVille(): ?Ville
+    {
+        return $this->ville;
+    }
+
+    public function setVille(?Ville $ville): self
+    {
+        $this->ville = $ville;
 
         return $this;
     }

@@ -23,7 +23,7 @@ class Produit
     #[ORM\Column(type: 'string', length: 255)]
     private $libelle;
 
-    #[ORM\Column(type: 'blob')]
+    #[ORM\Column(type: 'string')]
     private $photo;
 
     #[ORM\Column(type: 'float')]
@@ -31,9 +31,6 @@ class Produit
 
     #[ORM\Column(type: 'string', length: 255)]
     private $description;
-
-    #[ORM\Column(type: 'integer')]
-    private $quantite_dispo;
 
     #[ORM\Column(type: 'date')]
     private $date_ajout;
@@ -46,17 +43,15 @@ class Produit
     #[ORM\JoinColumn(nullable: false)]
     private $restaurant;
 
-    #[ORM\ManyToOne(targetEntity: CategoriesProduit::class, inversedBy: 'produits')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $categorie_produit;
+    #[ORM\OneToMany(mappedBy: 'produit', targetEntity: LigneCommande::class)]
+    private Collection $ligneCommandes;
 
-    #[ORM\OneToMany(mappedBy: 'produit', targetEntity: AvisProduit::class)]
-    private $avisProduits;
-
-
+ 
+    
     public function __construct()
     {
         $this->avisProduits = new ArrayCollection();
+        $this->ligneCommandes = new ArrayCollection();
     }
 
 
@@ -89,7 +84,7 @@ class Produit
         return $this;
     }
 
-    public function getPhoto()
+    public function getPhoto(): ?string
     {
         return $this->photo;
     }
@@ -125,17 +120,7 @@ class Produit
         return $this;
     }
 
-    public function getQuantiteDispo(): ?int
-    {
-        return $this->quantite_dispo;
-    }
-
-    public function setQuantiteDispo(int $quantite_dispo): self
-    {
-        $this->quantite_dispo = $quantite_dispo;
-
-        return $this;
-    }
+ 
 
     public function getDateAjout(): ?\DateTimeInterface
     {
@@ -173,46 +158,35 @@ class Produit
         return $this;
     }
 
-    public function getCategorieProduit(): ?CategoriesProduit
-    {
-        return $this->categorie_produit;
-    }
-
-    public function setCategorieProduit(?CategoriesProduit $categorie_produit): self
-    {
-        $this->categorie_produit = $categorie_produit;
-
-        return $this;
-    }
-
     /**
-     * @return Collection<int, AvisProduit>
+     * @return Collection<int, LigneCommande>
      */
-    public function getAvisProduits(): Collection
+    public function getLigneCommandes(): Collection
     {
-        return $this->avisProduits;
+        return $this->ligneCommandes;
     }
 
-    public function addAvisProduit(AvisProduit $avisProduit): self
+    public function addLigneCommande(LigneCommande $ligneCommande): self
     {
-        if (!$this->avisProduits->contains($avisProduit)) {
-            $this->avisProduits[] = $avisProduit;
-            $avisProduit->setProduit($this);
+        if (!$this->ligneCommandes->contains($ligneCommande)) {
+            $this->ligneCommandes->add($ligneCommande);
+            $ligneCommande->setProduit($this);
         }
 
         return $this;
     }
 
-    public function removeAvisProduit(AvisProduit $avisProduit): self
+    public function removeLigneCommande(LigneCommande $ligneCommande): self
     {
-        if ($this->avisProduits->removeElement($avisProduit)) {
+        if ($this->ligneCommandes->removeElement($ligneCommande)) {
             // set the owning side to null (unless already changed)
-            if ($avisProduit->getProduit() === $this) {
-                $avisProduit->setProduit(null);
+            if ($ligneCommande->getProduit() === $this) {
+                $ligneCommande->setProduit(null);
             }
         }
 
         return $this;
     }
 
+   
 }

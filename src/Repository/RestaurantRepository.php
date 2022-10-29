@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Restaurant;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\CategoriesRestaurant;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Restaurant>
@@ -63,4 +64,22 @@ class RestaurantRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+//find Restaurant By IdVille And IdCatRest 
+public function findRestaurantByIdVilleAndIdCatRest(int $idVille, int $idCatRest): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery('
+           SELECT r 
+           FROM App\Entity\Restaurant r
+           WHERE r.ville =:idVille AND r.categorie_restaurant =:idCatRest
+        '
+        )
+        ->setParameter('idVille', $idVille)
+        ->setParameter('idCatRest', $idCatRest);
+
+    return $query->getResult();
+}
+
 }

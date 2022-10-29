@@ -24,13 +24,17 @@ class TrafficManager extends User
     #[ORM\OneToMany(mappedBy: 'traffic_manager', targetEntity: Ville::class)]
     private $villes;
 
+    #[ORM\OneToMany(mappedBy: 'trafficManager', targetEntity: Commande::class)]
+    private Collection $commandes;
 
-
+  
     public function __construct()
     {
         $this->livreurs = new ArrayCollection();
         $this->recetteJours = new ArrayCollection();
         $this->villes = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
+
     }
 
        /**
@@ -122,4 +126,36 @@ class TrafficManager extends User
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    }
+
+    public function addCommande(Commande $commande): self
+    {
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes->add($commande);
+            $commande->setTrafficManager($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): self
+    {
+        if ($this->commandes->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getTrafficManager() === $this) {
+                $commande->setTrafficManager(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

@@ -6,11 +6,14 @@ use App\Entity\Livreur;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class LivreurCrudController extends AbstractCrudController
@@ -31,15 +34,19 @@ class LivreurCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
-            AssociationField::new('zone'),
+            AssociationField::new('ville'),
             AssociationField::new('vehicule'),
             BooleanField::new('disponibilite'),
-            //AssociationField::new('traffic_manager'),            
+            AssociationField::new('traffic_manager'),            
             TextField::new('nom'),
             TextField::new('prenom'),
             TextField::new('adresse'),
             TelephoneField::new('num_tel'),
             DateField::new('date_naissance'),
+            ChoiceField::new('genre')->setChoices([
+                'Homme' => 'homme',
+                'Femme' => 'femme',
+            ]),
             ImageField::new('CIN')
                 ->setBasePath(self::CIN_BASE_PATH)
                 ->setUploadDir(self::CIN_UPLOAD_DIR)
@@ -48,9 +55,10 @@ class LivreurCrudController extends AbstractCrudController
                 ->setBasePath(self::PERMIS_BASE_PATH)
                 ->setUploadDir(self::PERMIS_UPLOAD_DIR)
                 ->setSortable(false),
+            ArrayField::new('roles'),
             EmailField::new('email'),
-            TextField::new('password')
-       ];
+            TextField::new('password')->setFormType(PasswordType::class)  
+        ];
     }
     
 }

@@ -29,16 +29,17 @@ class RestaurantCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             AssociationField::new('categorie_restaurant'),
-            AssociationField::new('zone'),
+            AssociationField::new('ville'),
             TextField::new('nom'),
             TelephoneField::new('num_tel'),
             EmailField::new('email'),
+            //TextField::new('imageUrl'),
             ImageField::new('image')
             ->setBasePath(self::RESTAURANT_BASE_PATH)
             ->setUploadDir(self::RESTAURANT_UPLOAD_DIR)
             ->setSortable(false),
-            TextEditorField::new('description'),
-            BooleanField::new('ouvert'),
+            TextField::new('description'),
+            BooleanField::new('statu'),
         ];
     }
     

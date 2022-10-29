@@ -9,8 +9,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class ClientCrudController extends AbstractCrudController
@@ -19,13 +22,8 @@ class ClientCrudController extends AbstractCrudController
     {
         return Client::class;
     }
-    public function configureActions(Actions $actions): Actions
-    {
-        return $actions
-        // desactiver action"créer une reclamation"
-       ->disable(Action::NEW, Action::DELETE)
-       ->disable( Action::EDIT);
-    }
+  
+ 
   
     public function configureFields(string $pageName): iterable
     {  return[
@@ -36,8 +34,9 @@ class ClientCrudController extends AbstractCrudController
         TextField::new('adresse'),
         TelephoneField::new('num_tel'),
         DateField::new('date_naissance'),
-        EmailField::new('email'),
-        TextField::new('password'),
-    ];
+        EmailField::new('email'), 
+        TextField::new('password')->setFormType(PasswordType::class)
+        ];
+
 }
 }

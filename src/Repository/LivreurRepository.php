@@ -63,4 +63,19 @@ class LivreurRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+public function findLivreurByIdTm(int $trafficManagerId): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery('
+           SELECT l.nom , l.prenom , l.email , l.num_tel, l.date_naissance , l.adresse
+           FROM App\Entity\Livreur l
+           WHERE l.traffic_manager =:trafficManagerId 
+        '
+        )
+        ->setParameter('trafficManagerId', $trafficManagerId);
+
+    return $query->getResult();
+}
 }
